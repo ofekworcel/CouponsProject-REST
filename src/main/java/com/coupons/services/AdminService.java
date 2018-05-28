@@ -2,17 +2,22 @@ package com.coupons.services;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.coupon.utils.other.ApplicationResponse;
+import com.coupons.annotations.SessionFilterAnnotation;
 import com.coupons.utils.classes.UserInfo;
+import com.coupons.utils.other.ApplicationResponse;
 
 import Facade.AdminFacade;
 import Facade.ClientType;
@@ -38,6 +43,7 @@ public class AdminService {
 				return Response.status(Status.UNAUTHORIZED)
 						.entity(new ApplicationResponse(0, "The information you have provided is incorrect."))
 						.type(MediaType.APPLICATION_JSON).build();
+			httpRequest.getSession().invalidate();
 			httpRequest.getSession().setAttribute("facade", facade);
 			// return new ApplicationResponse(0, "Admin has logged in successfully");
 			return Response.status(Status.OK).entity(new ApplicationResponse(0, "Admin has logged in successfully."))
@@ -52,6 +58,7 @@ public class AdminService {
 	@Path("company")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
 	public Object createCompany(Company company) {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
@@ -64,13 +71,64 @@ public class AdminService {
 					.type(MediaType.APPLICATION_JSON).build();
 		}
 	}
-	
+
 	@GET
 	@Path("company")
 	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
 	public Object getCompanies() {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
-		return facade.getAllCompanies();
+		try {
+			return facade.getAllCompanies();
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
 	}
+	
+	@GET
+	@Path("company/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object getCompanyByID(@PathParam("id") long id) {
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			return facade.getCompany(id);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+	}
+
+	@PUT
+	@Path("company")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object updateCompany(Company company) {
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			facade.updateCompany(company);
+			return new ApplicationResponse(0, "Company has been updated successfully");
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+	}
+	
+	@DELETE
+	@Path("company/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object deleteCompany(@PathParam("id") long id) {
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			facade.removeCompany(id);
+			return new ApplicationResponse(0, "Company has been removed successfully");
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+	}
+	
+	// AdminService/company?id=1234
+	// AdminService/company/1234
+	
+
 
 }

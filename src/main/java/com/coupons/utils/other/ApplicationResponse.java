@@ -1,4 +1,4 @@
-package com.coupon.utils.other;
+package com.coupons.utils.other;
 
 public class ApplicationResponse {
 
