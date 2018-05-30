@@ -84,10 +84,10 @@ public class CustomerService {
 	}
 
 	@GET
-	@Path("coupon")
+	@Path("coupon/price")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object getCouponById(@QueryParam("price") double price) {
+	public Object getCouponByPrice(@QueryParam("price") double price) {
 		CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			return facade.getAllPurchasedCouponsByPrice(price);
@@ -97,7 +97,7 @@ public class CustomerService {
 	}
 
 	@GET
-	@Path("coupon")
+	@Path("coupon/type")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
 	public Object getCouponByType(@QueryParam("type") CouponType type) {

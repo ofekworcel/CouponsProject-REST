@@ -117,10 +117,10 @@ public class CompanyService {
 	}
 
 	@GET
-	@Path("coupon")
+	@Path("coupon/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object getCouponById(@QueryParam("id") long id) {
+	public Object getCouponById(@PathParam("id") long id) {
 		CompanyFacade facade = (CompanyFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			return facade.getCoupon(id);
@@ -130,7 +130,7 @@ public class CompanyService {
 	}
 
 	@GET
-	@Path("coupon")
+	@Path("coupon/type")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
 	public Object getCouponByType(@QueryParam("type") CouponType type) {
