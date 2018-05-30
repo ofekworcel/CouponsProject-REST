@@ -9,12 +9,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.coupons.annotations.SessionFilterAnnotation;
+import com.coupons.business_delegate.BusinessDelegate;
 import com.coupons.utils.classes.UserInfo;
 import com.coupons.utils.other.ApplicationResponse;
 
@@ -191,18 +193,53 @@ public class AdminService {
 	@Path("customer")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object updateCustomer(long id)
+	public Object updateCustomer(Customer customer)
 	{
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
-			facade.updateCustomer(id);
+			facade.updateCustomer(customer);
 			return new ApplicationResponse(0, "Company has been updated successfully");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 
 		}
 	}
-	// AdminService/company?id=1234
-	// AdminService/company/1234
 
+	@GET
+	@Path("income")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object viewAllIncome() {
+		try {
+			return BusinessDelegate.BusinessDelegate.viewAllIncome();
+		} catch (MyException e) {
+			return new ApplicationResponse(1, "There has been a problem retrieving income information.");
+		}
+	}
+	
+	@GET
+	@Path("income/company")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object viewIncomeByCompany(@QueryParam("name") String name) {
+		try {
+			return BusinessDelegate.BusinessDelegate.viewIncomeByCompany(name);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, "There has been a problem retrieving income information of specified company.");
+		}
+	}
+	
+	@GET
+	@Path("income/customer")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object viewIncomeByCustomer(@QueryParam("name") String name) {
+		try {
+			return BusinessDelegate.BusinessDelegate.viewIncomeByCustomer(name);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, "There has been a problem retrieving income information.");
+		}
+	}
+
+	
 }

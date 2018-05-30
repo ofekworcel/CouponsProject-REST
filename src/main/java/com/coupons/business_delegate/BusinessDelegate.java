@@ -18,7 +18,7 @@ public enum BusinessDelegate {
 	private BusinessDelegate() {
 	}
 
-	public synchronized String storeIncome(String name, String description, int amount) throws MyException {
+	public synchronized String storeIncome(String name, String description, double amount) throws MyException {
 		HttpURLConnection con = null;
 		try {
 			URL url = new URL("http://localhost:8888/IncomeService/income");
