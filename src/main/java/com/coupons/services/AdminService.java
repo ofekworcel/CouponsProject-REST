@@ -191,11 +191,11 @@ public class AdminService {
 	@Path("customer")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object updateCustomer(long id)
+	public Object updateCustomer(Customer customer)
 	{
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
-			facade.updateCustomer(id);
+			facade.updateCustomer(customer);
 			return new ApplicationResponse(0, "Company has been updated successfully");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
