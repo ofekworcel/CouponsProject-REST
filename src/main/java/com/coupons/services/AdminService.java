@@ -16,12 +16,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.coupons.annotations.SessionFilterAnnotation;
+import com.coupons.business_delegate.BusinessDelegate;
 import com.coupons.utils.classes.UserInfo;
 import com.coupons.utils.other.ApplicationResponse;
 
 import Facade.AdminFacade;
 import Facade.ClientType;
 import JavaBeans.Company;
+import JavaBeans.Customer;
 import Program.CouponSystemSingleton;
 import Utilities.MyException;
 
@@ -84,7 +86,7 @@ public class AdminService {
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
-	
+
 	@GET
 	@Path("company/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -111,7 +113,7 @@ public class AdminService {
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
-	
+
 	@DELETE
 	@Path("company/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -125,10 +127,119 @@ public class AdminService {
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
-	
-	// AdminService/company?id=1234
-	// AdminService/company/1234
-	
 
+	@POST
+	@Path("customer")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object createCustomer(Customer customer) {
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			facade.addCustomer(customer);
+			return Response.status(Status.OK)
+					.entity(new ApplicationResponse(0, "Company has been created successfully."))
+					.type(MediaType.APPLICATION_JSON).build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).entity(new ApplicationResponse(0, e.getMessage()))
+					.type(MediaType.APPLICATION_JSON).build();
+		}
+	}
 
+	@GET
+	@Path("customer")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object getCustomers() {
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			return facade.getAllCustomer();
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+	}
+	
+	@GET
+	@Path("customer/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object getCustomerByID(@PathParam("id") long id) {
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			return facade.getCustomer(id);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+		
+	}
+	
+	@DELETE
+	@Path("customer/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object deleteCustomer(@PathParam("id") long id)
+	{
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			facade.deleteCustomer(id);
+			return new ApplicationResponse(0, "Company has been removed successfully");
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+			
+	}
+	
+	@PUT
+	@Path("customer")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object updateCustomer(Customer customer)
+	{
+		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			facade.updateCustomer(customer);
+			return new ApplicationResponse(0, "Company has been updated successfully");
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+
+		}
+	}
+
+	@GET
+	@Path("income")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object viewAllIncome() {
+		try {
+			return BusinessDelegate.BusinessDelegate.viewAllIncome();
+		} catch (MyException e) {
+			return new ApplicationResponse(1, "There has been a problem retrieving income information.");
+		}
+	}
+	
+	@GET
+	@Path("income/company")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object viewIncomeByCompany(@QueryParam("name") String name) {
+		try {
+			return BusinessDelegate.BusinessDelegate.viewIncomeByCompany(name);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, "There has been a problem retrieving income information of specified company.");
+		}
+	}
+	
+	@GET
+	@Path("income/customer")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object viewIncomeByCustomer(@QueryParam("name") String name) {
+		try {
+			return BusinessDelegate.BusinessDelegate.viewIncomeByCustomer(name);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, "There has been a problem retrieving income information.");
+		}
+	}
+
+	
 }

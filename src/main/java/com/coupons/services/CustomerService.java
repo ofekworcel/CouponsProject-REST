@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.coupons.annotations.SessionFilterAnnotation;
+import com.coupons.business_delegate.BusinessDelegate;
 import com.coupons.utils.classes.UserInfo;
 import com.coupons.utils.other.ApplicationResponse;
 
@@ -27,6 +28,7 @@ import Utilities.MyException;
 @Path("CustomerService")
 public class CustomerService {
 
+	
 	@Context
 	private HttpServletRequest httpRequest;
 
@@ -44,73 +46,68 @@ public class CustomerService {
 						.type(MediaType.APPLICATION_JSON).build();
 			httpRequest.getSession().invalidate();
 			httpRequest.getSession().setAttribute("facade", facade);
-			// return new ApplicationResponse(0, "Customer has logged in successfully");
-			return Response.status(Status.OK).entity(new ApplicationResponse(1, "Customer has logged in successfully."))
+			return Response.status(Status.OK).entity(new ApplicationResponse(0, "Company has logged in successfully."))
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
-
 	}
-
+	
+	
 	@POST
-	@Path("purchaseCoupon")
+	@Path("coupon")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@SessionFilterAnnotation
 	public Object purchaseCoupon(Coupon coupon) {
-		CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
-
+		CustomerFacade  facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			facade.purchaseCoupon(coupon);
-			return new ApplicationResponse(0, "");
+			BusinessDelegate.BusinessDelegate.storeIncome(facade.getCurrentCustomerInfo().getCustName(),
+					"CUSTOMER_PURCHASE", coupon.getPrice());
+			return new ApplicationResponse(0, "Coupon purchased successfully.");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
-
 	}
-
+	
+	
 	@GET
 	@Path("coupon")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object getAllPurchasedCoupons() {
+	public Object getAllCustomerCoupons() {
+		CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 		try {
-
-			CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 			return facade.getAllPurchasedCoupons();
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
-
 	}
 
 	@GET
-	@Path("coupon/{couponType}")
+	@Path("coupon/price")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object getAllPurchasedCouponsByType(@PathParam("couponType") CouponType type) {
+	public Object getCouponByPrice(@QueryParam("price") double price) {
+		CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 		try {
-
-			CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
-			return facade.getAllPurchasedCouponsByType(type);
-		} catch (MyException e) {
-			return new ApplicationResponse(1, "Please try again");
-		}
-	}
-
-	@GET
-	@Path("coupon")
-	@Produces(MediaType.APPLICATION_JSON)
-	@SessionFilterAnnotation
-	public Object getAllPurchasedCouponsByPrice(@QueryParam("price")double price) {
-		try {
-
-			CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 			return facade.getAllPurchasedCouponsByPrice(price);
 		} catch (MyException e) {
-			return new ApplicationResponse(1, "Please try again");
+			return new ApplicationResponse(1, e.getMessage());
 		}
-
 	}
 
+	@GET
+	@Path("coupon/type")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object getCouponByType(@QueryParam("type") CouponType type) {
+		CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			return facade.getAllPurchasedCouponsByType(type);
+		} catch (MyException e) {
+			return new ApplicationResponse(1, e.getMessage());
+		}
+	}
+>>>>>>> branch 'master' of https://github.com/ofekworcel/CouponsProject-REST.git
 }
