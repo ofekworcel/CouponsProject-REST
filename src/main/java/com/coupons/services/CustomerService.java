@@ -109,5 +109,5 @@ public class CustomerService {
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
->>>>>>> branch 'master' of https://github.com/ofekworcel/CouponsProject-REST.git
+
 }
