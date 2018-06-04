@@ -58,6 +58,7 @@ public class CustomerService {
 	@Path("coupon")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
 	public Object purchaseCoupon(Coupon coupon) {
 		CustomerFacade  facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 		try {
