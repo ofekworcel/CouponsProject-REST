@@ -110,5 +110,17 @@ public class CustomerService {
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
+	
+	@POST
+	@Path("register")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object register()
+	{
+		//Unimplemented yet
+		
+		return new ApplicationResponse(0, "Customer successfully registered.");
+	}
 
 }

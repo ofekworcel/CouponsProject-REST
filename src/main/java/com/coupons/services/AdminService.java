@@ -66,7 +66,7 @@ public class AdminService {
 		try {
 			facade.addCompany(company);
 			return Response.status(Status.OK)
-					.entity(new ApplicationResponse(0, "Company has been created successfully."))
+					.entity(new ApplicationResponse(0, "Company has been successfully created."))
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Status.BAD_REQUEST).entity(new ApplicationResponse(0, e.getMessage()))
@@ -108,7 +108,7 @@ public class AdminService {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			facade.updateCompany(company);
-			return new ApplicationResponse(0, "Company has been updated successfully");
+			return new ApplicationResponse(0, "Company has been successfully updated.");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
@@ -122,7 +122,7 @@ public class AdminService {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			facade.removeCompany(id);
-			return new ApplicationResponse(0, "Company has been removed successfully");
+			return new ApplicationResponse(0, "Company has been successfully removed.");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
@@ -138,7 +138,7 @@ public class AdminService {
 		try {
 			facade.addCustomer(customer);
 			return Response.status(Status.OK)
-					.entity(new ApplicationResponse(0, "Company has been created successfully."))
+					.entity(new ApplicationResponse(0, "Customer has been successfully created."))
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Status.BAD_REQUEST).entity(new ApplicationResponse(0, e.getMessage()))
@@ -182,7 +182,7 @@ public class AdminService {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			facade.deleteCustomer(id);
-			return new ApplicationResponse(0, "Company has been removed successfully");
+			return new ApplicationResponse(0, "Customer has been successfully removed.");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
@@ -198,7 +198,7 @@ public class AdminService {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			facade.updateCustomer(customer);
-			return new ApplicationResponse(0, "Company has been updated successfully");
+			return new ApplicationResponse(0, "Customer has been successfully updated.");
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 
