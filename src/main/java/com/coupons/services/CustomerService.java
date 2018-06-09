@@ -62,7 +62,9 @@ public class CustomerService {
 	public Object purchaseCoupon(Coupon coupon) {
 		CustomerFacade  facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
 		try {
+			System.out.println("Customer service purchesCoupon works");
 			facade.purchaseCoupon(coupon);
+			System.out.println("Facade.PurchesCoupon works");
 			BusinessDelegate.BusinessDelegate.storeIncome(facade.getCurrentCustomerInfo().getCustName(),
 					"CUSTOMER_PURCHASE", coupon.getPrice());
 			return new ApplicationResponse(0, "Coupon purchased successfully.");
@@ -121,6 +123,22 @@ public class CustomerService {
 		//Unimplemented yet
 		
 		return new ApplicationResponse(0, "Customer successfully registered.");
+	}
+	
+	@GET
+	@Path("allCoupons")
+	@Produces(MediaType.APPLICATION_JSON)
+	@SessionFilterAnnotation
+	public Object getAllCoupons()
+	{
+		CustomerFacade facade = (CustomerFacade) httpRequest.getSession().getAttribute("facade");
+		try {
+			return facade.showAllCoupons();
+		}
+		catch(MyException e)
+		{
+			return new ApplicationResponse(1, e.getMessage());
+		}
 	}
 
 }
