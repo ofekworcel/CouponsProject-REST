@@ -72,10 +72,10 @@ public enum BusinessDelegate {
 			throw new MyException(e.getMessage());
 		} 
 	}
-	public synchronized String viewIncomeByCompany(String name) throws MyException {
+	public synchronized String viewIncomeByCompany(long id) throws MyException {
 		URL url;
 		try {
-		url = new URL("http://localhost:8888/IncomeService/income/company?name=" + name);		
+		url = new URL("http://localhost:8888/IncomeService/income/company?id=" + id);		
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		con.connect();
@@ -91,10 +91,10 @@ public enum BusinessDelegate {
 			throw new MyException(e.getMessage());
 		} 
 	}
-	public synchronized String viewIncomeByCustomer(String name) throws MyException {
+	public synchronized String viewIncomeByCustomer(long id) throws MyException {
 		URL url;
 		try {
-		url = new URL("http://localhost:8888/IncomeService/income/customer?name=" + name);		
+		url = new URL("http://localhost:8888/IncomeService/income/customer?name=" + id);		
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		con.connect();

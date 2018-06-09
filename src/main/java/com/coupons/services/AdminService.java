@@ -221,9 +221,9 @@ public class AdminService {
 	@Path("income/company")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object viewIncomeByCompany(@QueryParam("name") String name) {
+	public Object viewIncomeByCompany(@QueryParam("id") long id) {
 		try {
-			return BusinessDelegate.BusinessDelegate.viewIncomeByCompany(name);
+			return BusinessDelegate.BusinessDelegate.viewIncomeByCompany(id);
 		} catch (MyException e) {
 			return new ApplicationResponse(1, "There has been a problem retrieving income information of specified company.");
 		}
@@ -233,9 +233,9 @@ public class AdminService {
 	@Path("income/customer")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
-	public Object viewIncomeByCustomer(@QueryParam("name") String name) {
+	public Object viewIncomeByCustomer(@QueryParam("id") long id) {
 		try {
-			return BusinessDelegate.BusinessDelegate.viewIncomeByCustomer(name);
+			return BusinessDelegate.BusinessDelegate.viewIncomeByCustomer(id);
 		} catch (MyException e) {
 			return new ApplicationResponse(1, "There has been a problem retrieving income information.");
 		}
