@@ -79,12 +79,14 @@ public class CompanyService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
 	public Object updateCoupon(Coupon coupon) {
+		System.out.println("updateCoupon in CompanyService works!");
 		CompanyFacade facade = (CompanyFacade) httpRequest.getSession().getAttribute("facade");
 		try {
 			facade.updateCoupon(coupon);
 			BusinessDelegate.BusinessDelegate.storeIncome(facade.getCurrentCompanyInfo().getCompName(), "COMPANY_UPDATE_COUPON", 10);
 			return new ApplicationResponse(0, "Coupon updated successfully.");
 		} catch (MyException e) {
+			System.out.println("updateCoupon CompanyService dropped on sql exception");
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
