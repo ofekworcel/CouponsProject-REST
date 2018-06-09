@@ -86,7 +86,7 @@ public class CompanyService {
 			BusinessDelegate.BusinessDelegate.storeIncome(facade.getCurrentCompanyInfo().getCompName(), "COMPANY_UPDATE_COUPON", 10);
 			return new ApplicationResponse(0, "Coupon updated successfully.");
 		} catch (MyException e) {
-			System.out.println("updateCoupon CompanyService dropped on sql exception");
+			System.out.println("updateCoupon CompanyService dropped on myexception " + e.getMessage());
 			return new ApplicationResponse(1, e.getMessage());
 		}
 	}
