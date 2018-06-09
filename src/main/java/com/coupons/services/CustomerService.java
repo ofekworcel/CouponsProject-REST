@@ -46,7 +46,7 @@ public class CustomerService {
 						.type(MediaType.APPLICATION_JSON).build();
 			httpRequest.getSession().invalidate();
 			httpRequest.getSession().setAttribute("facade", facade);
-			return Response.status(Status.OK).entity(new ApplicationResponse(0, "Company has logged in successfully."))
+			return Response.status(Status.OK).entity(new ApplicationResponse(0, "Customer has logged in successfully."))
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
