@@ -136,6 +136,7 @@ public class AdminService {
 	public Object createCustomer(Customer customer) {
 		AdminFacade facade = (AdminFacade) httpRequest.getSession().getAttribute("facade");
 		try {
+			System.out.println("create customer function activated");
 			facade.addCustomer(customer);
 			return Response.status(Status.OK)
 					.entity(new ApplicationResponse(0, "Customer has been successfully created."))
@@ -160,7 +161,7 @@ public class AdminService {
 	}
 	
 	@GET
-	@Path("customer/{id}")
+	@Path("customerid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@SessionFilterAnnotation
 	public Object getCustomerByID(@PathParam("id") long id) {
@@ -170,7 +171,6 @@ public class AdminService {
 		} catch (MyException e) {
 			return new ApplicationResponse(1, e.getMessage());
 		}
-		
 	}
 	
 	@DELETE
